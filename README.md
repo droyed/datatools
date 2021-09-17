@@ -1,4 +1,4 @@
-### Data-setup tools for Deep-learning
+## Data-setup tools for Deep-learning
 
 As the name suggests, this repository is a collection of tools that's meant to assist in data preparation needed for training deep learning models. For now, the focus is on providing tools to assist in tensorflow object detection workflows.
 
