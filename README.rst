@@ -19,6 +19,13 @@ Update pip, install dependencies and repository :
 	pip install git+https://github.com/droyed/datatools.git
 
 
+Tensorflow object detection data setup
+--------------------------------------
+
+`TFOD_Documentation <https://raw.githubusercontent.com/droyed/datatools/main/docs/source/tfod_setup_imgs_xmls.md>`_
+
+
+
 .. |Py-Versions| image:: https://img.shields.io/badge/Python-3.6+-blue
    :target: https://github.com/droyed/datatools
 

@@ -86,4 +86,4 @@ datatools.od.minmaxcsv_to_setup(indir, in_csv, label, outdir_imgsxmls, outdir_de
 
 ### Demos
 
-Run `bash rundemos.sh` to run the demos that showcase runs on these scenarios.
+Run `demos/objdetect_setup/bash rundemos.sh` to run the demos that showcase runs on these scenarios.
