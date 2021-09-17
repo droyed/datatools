@@ -12,6 +12,7 @@ As the name suggests, this repository is a collection of tools that's meant to a
 Update pip, install dependencies and repo :
 
 .. code-block:: console
+
 	pip install -U pip
 	pip install -r https://raw.githubusercontent.com/droyed/datatools/main/requirements.txt
 	pip install git+https://github.com/droyed/datatools.git
