@@ -22,7 +22,7 @@ Update pip, install dependencies and repository :
 Documentation
 -------------
 
-`Tensorflow object detection data setup <https://github.com/droyed/datatools/blob/main/docs/source/tfod_setup_imgs_xmls.md>`_
+* `Tensorflow object detection data setup <https://github.com/droyed/datatools/blob/main/docs/source/tfod_setup_imgs_xmls.md>`_
 
 
 
