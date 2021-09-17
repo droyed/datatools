@@ -10,7 +10,7 @@ As the name suggests, this repository is a collection of tools that's meant to a
 Installation
 ------------
 
-Update pip, install dependencies and repo :
+Update pip, install dependencies and repository :
 
 .. code-block:: console
 
