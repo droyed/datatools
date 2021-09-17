@@ -4,12 +4,23 @@ import sys
 
 in_csv = 'data_test/data_CP.csv' # csv path of feature points
 
+## Sample input csv :
+## FN : Filename
+## CP : Feature    
+#
+#           FN          CP
+# 0  00003.jpg   (165, 76)
+# 1  00032.jpg   (128, 67)
+# 2  00055.jpg   (242, 81)
+# 3  00148.jpg   (251, 93)
+# 4  00175.jpg  (304, 201)
+
 # Read in csv as dataframe
 df_in = pd.read_csv(in_csv)
 
 optionID = 2
 if len(sys.argv)>1:
-    optionID = int(sys.argv[1])    
+    optionID = int(sys.argv[1])
 
 #-------------------------------- Setup bboxH and bboxW headers ---------------
 ## Choose one among these 3 choices, edit and comment out other 2.

@@ -5,9 +5,8 @@ indir = 'data_test/imgs'
 in_csv = 'data_test/data_CP_bboxHW_xyminmax.csv'
 label = 'KANGEYES'
 
-## Sample input csv to minmaxcsv_to_setup :    
+## Sample input csv to minmaxcsv_to_setup :
 ## FN : Filename
-## FP : Filepath
 ## xmin : Bounding box xmin
 ## xmax : Bounding box xmax
 ## ymin : Bounding box ymin
