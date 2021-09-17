@@ -20,11 +20,11 @@ Update pip, install dependencies and repo :
 
 
 .. |Py-Versions| image:: https://img.shields.io/badge/Python-3.6+-blue
-   :target: https://github.com/droyed/mansh
+   :target: https://github.com/droyed/datatools
 
 .. |OS| image:: https://img.shields.io/badge/Platform-%E2%98%AFLinux-9cf
-   :target: https://github.com/droyed/mansh
+   :target: https://github.com/droyed/datatools
 
 .. |License| image:: https://img.shields.io/badge/license-MIT-green
-   :target: https://raw.githubusercontent.com/droyed/mansh/master/LICENSE
+   :target: https://raw.githubusercontent.com/droyed/datatools/master/LICENSE
 
