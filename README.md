@@ -8,7 +8,7 @@ As the name suggests, this repository is a collection of tools that's meant to a
 pip install -r requirements.txt
 ```
 
-### Installation
+#### Installation
 
 Pull latest development release on GitHub and install in current directory :
 ```shell
