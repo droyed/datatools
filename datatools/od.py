@@ -177,19 +177,26 @@ def bboxcsv_to_minmaxcsv(indir, in_csv, feature_header, ptformat, out_csv, PRINT
     ## 'bboxH' : bounding box header for height
     ## 'bboxW' : bounding box header for width
 
-    ## Sample input csv :    
-    #                                                   FN         RBP  dist  bboxH  bboxW
-    # 0     qefmascom_TopSideImage_2017-06-22-12_41_54.jpg  [331, 368]   478  239.0   95.6
-    # 1     tjfmascom_TopSideImage_2017-06-28-12_47_39.jpg  [306, 445]   413  206.5   82.6
-    # 2     kjfmascom_TopSideImage_2017-04-19-16_35_03.jpg  [410, 395]   432  216.0   86.4
-    # 3  runbsfmascom_TopSideImage_2017-07-04-02_41_08.jpg  [306, 396]   469  234.5   93.8
-    # 4    sddfmascom_TopSideImage_2017-06-23-17_24_25.jpg  [309, 372]   440  220.0   88.0
-    
+    ## Sample input csv (in_csv, CP is feature header) :
+    #
+    #           FN          CP  bboxH  bboxW
+    # 0  00003.jpg   (165, 76)    218     87
+    # 1  00032.jpg   (128, 67)    243     97
+    # 2  00055.jpg   (242, 81)    219     87
+    # 3  00148.jpg   (251, 93)    247     98
+    # 4  00175.jpg  (304, 201)    219     87
+    #
+    ## Sample input csv (out_csv, CP is feature header) :
+    #
+    #           FN  xmin  xmax  ymin  ymax
+    # 0  00003.jpg   122   208     0   185
+    # 1  00032.jpg    80   176     0   188
+    # 2  00055.jpg   198   286     0   190
+    # 3  00148.jpg   202   300     0   216
+    # 4  00175.jpg   260   348    92   310
+
     # Read in csv as df
     df_in = pd.read_csv(in_csv)
-    
-    #print('df_in head :')
-    #print(df_in.head())
     
     bboxs = []
     for index, row in df_in.iterrows():    
@@ -206,9 +213,6 @@ def bboxcsv_to_minmaxcsv(indir, in_csv, feature_header, ptformat, out_csv, PRINT
         bboxs.append(info_i)
         
     df_out = pd.DataFrame(bboxs)
-    
-    #print('df_out head :')
-    #print(df_out.head())
 
     df_out.to_csv(out_csv, index=False)
     print('Output csv of bbox info saved at - '+out_csv)
@@ -219,13 +223,13 @@ def minmaxcsv_to_setup(indir, in_csv, label, outdir_imgsxmls, outdir_debug, NUM_
     ## 'FP' : filepath header
 
     ## Sample input csv :    
-    #                                                   FN                                                 FP  xmin  xmax  ymin  ymax
-    # 0     qefmascom_TopSideImage_2017-06-22-12_41_54.jpg  /home/diva/pprojs/data_xml/SinglePaper-Portrai...   331   427   249   487
-    # 1     tjfmascom_TopSideImage_2017-06-28-12_47_39.jpg  /home/diva/pprojs/data_xml/SinglePaper-Portrai...   306   389   342   548
-    # 2     kjfmascom_TopSideImage_2017-04-19-16_35_03.jpg  /home/diva/pprojs/data_xml/SinglePaper-Portrai...   410   496   287   503
-    # 3  runbsfmascom_TopSideImage_2017-07-04-02_41_08.jpg  /home/diva/pprojs/data_xml/SinglePaper-Portrai...   306   400   279   513
-    # 4    sddfmascom_TopSideImage_2017-06-23-17_24_25.jpg  /home/diva/pprojs/data_xml/SinglePaper-Portrai...   309   397   262   482
-
+    #           FN  xmin  ymin  xmax  ymax
+    # 0  00003.jpg   102     4   346   273
+    # 1  00032.jpg    73    27   244   340
+    # 2  00055.jpg   148    19   293   321
+    # 3  00148.jpg   220    31   466   403
+    # 4  00175.jpg   224    61   532   439
+    
     # Get template path
     xml_template = os.path.join(os.path.dirname(__file__), 'od_template.xml')
     
