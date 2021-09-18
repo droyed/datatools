@@ -59,7 +59,7 @@ This is same as case `(1)` and additionally we have the bounding box. We still n
 
 We have three keypoints here and we could define a bounding box based on these. One common workflow could be to define it as the `min`-`max` of these keypoints.
 
-### Reaching `end`
+### `scenarios` to `end`
 
 Our task is to reach `end` starting from these scenarios and then finally arrive at `dirix`.
 
@@ -77,7 +77,7 @@ datatools.od.features_to_minmaxcsv(incsv, outcsv, feature_headers = ['TL', 'TR',
 
 ```
 
-### Reaching `dirix`
+### `end` to `dirix`
 Finally, to go from `end` to `dirix`,  run :
 
 ```python
@@ -86,4 +86,4 @@ datatools.od.minmaxcsv_to_setup(indir, in_csv, label, outdir_imgsxmls, outdir_de
 
 ### Demos
 
-Run `demos/objdetect_setup/bash rundemos.sh` to run the demos that showcase runs on these scenarios.
+Run `demos/objdetect_setup/bash rundemos.sh` to run the demos that showcase runs sample runs.
