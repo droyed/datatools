@@ -84,6 +84,18 @@ Finally, to go from `end` to `dirix`,  run :
 datatools.od.minmaxcsv_to_setup(indir, in_csv, label, outdir_imgsxmls, outdir_debug)
 ```
 
+Here's a schematic that summarizes listed workflows :
+
+```
+Scenario #1
+     |
+     v
+Scenario #2 ----> end ----> dirix
+                  ^
+                  |  
+Scenario #3 ------|
+```
+
 ### Demos
 
 Run `demos/objdetect_setup/bash rundemos.sh` to run the demos that showcase sample runs.
