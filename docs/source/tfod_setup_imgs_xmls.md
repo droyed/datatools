@@ -92,7 +92,7 @@ Here's a schematic that summarizes listed workflows :
 Scenario #1
      |
      v
-Scenario #2 ----> end ----> dirix
+Scenario #2 ----> end ----> dirix ----> tfrecords
                   ^
                   |  
 Scenario #3 ------|
