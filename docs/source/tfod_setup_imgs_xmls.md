@@ -84,6 +84,8 @@ Finally, to go from `end` to `dirix`,  run :
 datatools.od.minmaxcsv_to_setup(indir, in_csv, label, outdir_imgsxmls, outdir_debug)
 ```
 
+### Schematic summary
+
 Here's a schematic that summarizes listed workflows :
 
 ```
