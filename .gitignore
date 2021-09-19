@@ -9,3 +9,6 @@ dist/
 
 # Python files that store text content, specifically paths that were created during local python setup installation
 *.pyt
+
+# obsidian files
+*.obsidian

@@ -101,3 +101,33 @@ Scenario #3 ------|
 ### Demos
 
 Run `demos/objdetect_setup/bash rundemos.sh` to run the demos that showcase sample runs.
+
+----
+
+### Multiple objects
+
+**Scenario #1 :** Input csv with multiple objects bounding boxes for each image.
+
+Sample csv : 
+
+```
+          FN                 cat                  dog                  pig
+0  00003.jpg  (108, 4, 200, 150)  (218, 23, 290, 120)  (158, 24, 260, 190)
+1  00032.jpg  (38, 55, 160, 120)  (118, 53, 190, 220)  (128, 34, 192, 250)
+```
+
+Each bounding box is captured with this format - `[xmin, ymin, xmax, ymax]`.
+Run `demos/demo_minmaxcsv_to_setup_multiple.py` for a sample case run.
+
+Syntax :
+
+```python
+datatools.od.minmaxcsv_to_setup_multiple(
+	indir,            # input directory of images
+	in_csv,           # input csv of format shown above
+	feature_labels,   # feature labels = ['cat', 'dog', 'pig'] here
+	outdir_imgsxmls,
+	outdir_debug)
+```
+
+Running it will generate `dirix` with xmls that have all feature labels' bounding boxes in each xml for an image.

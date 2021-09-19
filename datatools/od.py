@@ -7,6 +7,11 @@ import shutil
 import xml.etree.ElementTree as ET
 import ast
 import cv2
+import copy
+
+
+# Get template path
+xml_template = os.path.join(os.path.dirname(__file__), 'od_template.xml')
 
 
 def iterinfo(fpaths, iterID):
@@ -229,10 +234,7 @@ def minmaxcsv_to_setup(indir, in_csv, label, outdir_imgsxmls, outdir_debug, NUM_
     # 2  00055.jpg   148    19   293   321
     # 3  00148.jpg   220    31   466   403
     # 4  00175.jpg   224    61   532   439
-    
-    # Get template path
-    xml_template = os.path.join(os.path.dirname(__file__), 'od_template.xml')
-    
+        
     # Read in csv as df
     df_out = pd.read_csv(in_csv)
 
@@ -289,3 +291,151 @@ def features_to_minmaxcsv(incsv, feature_headers, outcsv):
     pd.DataFrame(out).to_csv(outcsv, index=False)
     print('Output csv with min-max bounds saved at : '+outcsv)
     return
+    
+# Convert/evaluate strings from csv headers
+def ast_literal_eval_inplace(df, headers):
+    for h in headers:
+        df[h] = [ast.literal_eval(i) for i in df[h]]
+    return df
+
+# Edit object element in template xml for tf object detection     
+def edit_object_element(p0, new_object_name, new_object_bbox, make_copy=False):
+    # Edit object name and bounding box into xml file
+    if make_copy:
+        p = copy.deepcopy(p0)
+    else:
+        p = p0
+    k1 = p.find('name')
+    k1.text = new_object_name
+    
+    k2 = p.find('bndbox')
+    for k,v in new_object_bbox.items():
+        k2_1 = k2.find(k)
+        k2_1.text = str(v)
+    return p
+
+# Create formatted tf object detection xml file from given parameters
+def format_xml(filename, filepath, objects, out_xml_fpath):
+    ## Syntax :
+    # filename : 'fname'
+    # filename : 'fpath'
+    # objects = {
+    #     'cat':{'xmin':988, 'ymin':20, 'xmax':70, 'ymax':130},
+    #     'dog':{'xmin':288, 'ymin':50, 'xmax':20, 'ymax':430},
+    #     'pig':{'xmin':588, 'ymin':70, 'xmax':90, 'ymax':230},
+    #     }
+    # out_xml_fpath : 'out.xml'
+
+    tree = ET.parse(xml_template)
+    root = tree.getroot()
+    
+    root.find('filename').text = filename
+    root.find('path').text = filepath
+    
+    p = root.find('object')
+    for iterID,(k,v) in enumerate(objects.items()):
+        make_copy = iterID>0
+        p_k = edit_object_element(p, new_object_name=k, new_object_bbox=v, make_copy=make_copy)
+        if make_copy:
+            root.append(p_k)
+    
+    tree.write(out_xml_fpath)
+    return
+
+# Draw bounding box in a debug image 
+def draw_bbox_inimg(im_draw, info, label=None, line_thickness = 2, SHOW=False):    
+    if isinstance(info, dict):
+        feature_xmin, feature_ymin, feature_xmax, feature_ymax = info['xmin'], info['ymin'], info['xmax'], info['ymax']
+    elif isinstance(info, list) or isinstance(info, tuple):
+        feature_xmin, feature_ymin, feature_xmax, feature_ymax = info
+    else:
+        raise Exception('Input form at not recognized!')
+    
+    cv2.line(im_draw,(feature_xmin, feature_ymin),(feature_xmin, feature_ymax),(255,0,0),line_thickness)
+    cv2.line(im_draw,(feature_xmin, feature_ymax),(feature_xmax, feature_ymax),(255,0,0),line_thickness)
+    cv2.line(im_draw,(feature_xmax, feature_ymax),(feature_xmax, feature_ymin),(255,0,0),line_thickness)
+    cv2.line(im_draw,(feature_xmax, feature_ymin),(feature_xmin, feature_ymin),(255,0,0),line_thickness)
+    cv2.putText(im_draw, label, (feature_xmax, feature_ymax),cv2.LINE_AA,1,(0,0,0),2)
+    
+    if SHOW:
+        image_show('im_draw', im_draw)
+        DisplayWindow()
+
+    return im_draw
+
+# Input a csv with min-max bounding box info across one or more features and output directory of images and xmls
+def minmaxcsv_to_setup_multiple(indir, in_csv, feature_labels, outdir_imgsxmls, outdir_debug, NUM_DEBUG=None):
+    ## Syntax :
+    # indir : input dir of images
+    # in_csv : input csv with format :
+    #   
+    #           FN                 cat                  dog                  pig
+    # 0  00003.jpg  (108, 4, 200, 150)  (218, 23, 290, 120)   (108, 4, 200, 150)
+    # 1  00032.jpg  (38, 55, 160, 120)  (118, 53, 190, 220)  (128, 34, 192, 250)
+    #
+    # feature_labels : ['cat', 'dog', 'pig']
+    # outdir_imgsxmls : output dir to save images and xmls
+    # outdir_debug : output dir to save images with marked bounding boxes
+    # NUM_DEBUG : number of debug images to be saved with marked bounding boxes
+
+    newmkdir(outdir_imgsxmls)
+    newmkdir(outdir_debug)
+    
+    df = pd.read_csv(in_csv)
+    ast_literal_eval_inplace(df, feature_labels)
+    
+    if NUM_DEBUG is not None:
+        DEBUG_IDS = np.random.choice(len(df), min(len(df), NUM_DEBUG), replace=False)
+    else:
+        DEBUG_IDS = np.arange(len(df))
+    
+    for iterID,(index,row) in enumerate(df.iterrows()):
+        iterinfo(df.FN.values, iterID)
+        d = dict(row)
+        dict1 = {key:dict(zip(['xmin', 'ymin', 'xmax', 'ymax'], d[key])) for key in feature_labels}    
+        out_xml = os.path.join(outdir_imgsxmls, os.path.splitext(d['FN'])[0]+'.xml')
+        
+        # Copy over the input images directly into output directory
+        fn = d['FN']
+        src = os.path.join(indir, fn)
+        dst = os.path.join(outdir_imgsxmls, fn)
+        shutil.copyfile(src, dst)        
+        format_xml(filename=fn, filepath=dst, objects=dict1, out_xml_fpath=out_xml)
+        
+        # Create debug imgs with bbox marked 
+        if iterID in DEBUG_IDS:
+            im_draw = cv2.imread(src)
+            for k,v in dict1.items():
+                draw_bbox_inimg(im_draw, info=v, label=k, SHOW=False)    
+            cv2.imwrite(os.path.join(outdir_debug, d['FN']), im_draw)
+            
+    return
+
+# Convert a df with feature point headers to a single header defined by feature extents
+def features_to_minmaxdf(df, feature_headers, out_feature_header):
+    # Input csv :
+    #          FN          TL          TR           BL
+    # 0  0001.jpg  (249, 350)  (783, 358)  (261, 1050)
+    # 1  0002.jpg  (260, 340)  (781, 322)  (301, 1019)
+    #    
+    # Output csv :
+    #          FN                    FUP
+    # 0  0001.jpg   [249, 350, 783, 1050]
+    # 1  0002.jpg.  [260, 322, 781, 1019]
+        
+    out = []
+    for index,row in df.iterrows():
+        d = dict(row)
+        
+        a = np.vstack([ast.literal_eval(d[fh]) for fh in feature_headers])
+        xmin,ymin = a.min(0)
+        xmax,ymax = a.max(0)
+        
+        out_i = {}
+        out_i['FN'] = d['FN']
+        out_i[out_feature_header] = [xmin, ymin, xmax, ymax]
+        out.append(out_i)
+    
+    df_out = pd.DataFrame(out)
+    return df_out
+
