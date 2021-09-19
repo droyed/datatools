@@ -127,8 +127,8 @@ datatools.od.minmaxcsv_to_setup_multiple(
 	indir,            # input directory of images
 	in_csv,           # input csv of format shown above
 	feature_labels,   # feature labels = ['cat', 'dog', 'pig'] here
-	outdir_imgsxmls,
-	outdir_debug)
+	outdir_imgsxmls,  # output path to save images and xmls
+	outdir_debug)     # output path to save bounding box debug images
 ```
 
 Running it will generate `dirix` with xmls that have all feature labels' bounding boxes in each xml for an image.
