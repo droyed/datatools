@@ -117,6 +117,7 @@ Sample csv :
 ```
 
 Each bounding box is captured with this format - `[xmin, ymin, xmax, ymax]`.
+
 Run `demos/demo_minmaxcsv_to_setup_multiple.py` for a sample case run.
 
 Syntax :
