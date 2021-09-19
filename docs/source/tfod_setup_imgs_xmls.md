@@ -63,6 +63,12 @@ We have three keypoints here and we could define a bounding box based on these. 
 
 Our task is to reach `end` starting from these scenarios and then finally arrive at `dirix`.
 
+Let's import the package to get things started :
+
+```python
+import datatools
+```
+
 **From Scenario #1 :** To go from `start1` to `end`, we need to get to `start2` first. We would a parameter to setup bounding box sizes. There are three ways to setup those - Bounding box sizes depend on the image dimensions or depend on another header in the dataframe or fixed. For this, we can use  utility script `start1_to_start2.py` that also explores these variations.
 
 **From Scenario #2 :** To go from `start2` to `end`,  we need to add information on the starting x-y coordinates of the bounding boxes. Basically, the bounding boxes would be in the surrounding of the feature point with some mapping that could be defined based on a paramater `ptformat`, like so :
